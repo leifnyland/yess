@@ -1,0 +1,99 @@
+# This program performs an insertion sort on a list of numbers.
+# Note the sort is in-place. At the end there is a single, sorted list.
+# If the program is correct, then the final memory dump should contain the 
+# following:
+# 100: 000000000000000a fffffffffffffff9 fffffffffffffffe 0000000000000002 
+# 120: 0000000000000003 0000000000000005 0000000000000009 000000000000000c 
+# 140: 000000000000000e 0000000000000017 000000000000001b 0000000000000000 
+#
+        .pos 0
+        irmovq stack, %rsp   #initialize stack pointer
+        irmovq list, %rdi    #address of first element
+        irmovq len, %rax     #address of length of list
+        mrmovq (%rax), %rax  #load length of list
+        irmovq 8, %rsi       #offset of current element to insert
+        irmovq 1, %rcx       #length of sorted list 
+#
+# loop inserting each element into a sorted list
+# first iteration: insert 3 into list containing 14 giving the list 3 14
+# second iteration: insert 2 into the list containing 3 14 giving the list 2 3 14
+# third iteration: insert 27 into the list contain 2 3 14 giving 2 3 14 27
+# stop when the length of the sorted list is equal to the length of list
+# 
+# TODO: Provide missing code (see description below of insert function)
+		#
+        rrmovq %rdi, %r8     # uses %r8 as the list address
+        rrmovq %rsi, %rbx    # initialize offset
+loop:   rrmovq %rbx, %r9     # set offset to current offset
+        call insert
+        addq %rsi, %rbx      # increment by initial offset
+        irmovq 1, %r11
+        addq %r11, %rcx      # add 1 to the length of the sorted list
+        rrmovq %rax, %r11
+        subq %rcx, %r11      # %r11 = %r11 - %rcx  subtracts sorted length from total length
+        jg loop              # if %r11 > 0 rerun the loop
+        
+#
+done:   halt
+#
+# insert function
+# Takes the address of the first element in the list
+# and the offset from that address of the new element to insert
+# and swaps the values of consecutive elements until the new element
+# is in the correct spot.
+# For example, suppose current list is -2 2 3 14 27
+# Next element to insert is 9 (which in memory is right after the 27)
+# The insert function will loop:
+# after first iteration the list will be: -2 2 4 14 9 27
+# after second iteration the list will be: -2 2 4 9 14 27
+# Now, the function is exited because the 9 is in the right spot (> 4)
+
+# %r8 - (INPUT) address of the first element in the list
+# %r9 - (INPUT) input address offset to be inserted
+# %r10 - swapping address
+# %r11 - comparison operator
+# %r12 - value of swapping address
+# %r13 - value being inserted
+
+insert: 
+        addq %r8, %r9        # sets %r9 to insertion address
+		mrmovq (%r9), %r13   # gets value being inserted
+swap:                 #loops swap until %r13 > the element before it
+        rrmovq %r9, %r10
+        irmovq 8, %r11      
+        subq %r11, %r10      # decrement insertion to get other value
+        mrmovq (%r10), %r12   # get value to be swapped
+
+#breaks out of the loop if %r10 < the first element in the list
+        rrmovq %r10, %r11     # %r11 = %r9
+        subq %r8, %r11       # %r11 = %r11 - %r8
+        jl brk              # if %r11 > 0 then %r10 < %r8, so break the loop
+
+        rrmovq %r12, %r11    # r11 = 12
+        subq %r13, %r11      # %r11 = %r12 - %r13
+		jle brk             #attempting to replace conditionals with a jump
+		rrmovq %r10, %r11     # if %r11 > 0 then (%r13 < %r12) and there will be a swap
+        rrmovq %r9, %r10      # if swapping, swap addresses before storing %r10 <-> %r9
+        rrmovq %r11, %r9
+		rmmovq %r13, (%r9)   # stores values
+		rmmovq %r12, (%r10)  # addresses have been swapped if needed
+		jmp swap              # if there was a swap, do it all again
+brk:    ret
+#
+#        list data
+        .pos 0x100
+len:    .quad 10 
+list:   .quad 14
+        .quad 3
+        .quad 2
+        .quad 27
+        .quad -2
+        .quad 12
+        .quad 23
+        .quad 5
+        .quad -7   
+        .quad 9  
+
+#       stack    
+        .pos 0x200
+stack:  .quad 0    

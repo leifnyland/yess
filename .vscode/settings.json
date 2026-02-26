@@ -1,0 +1,16 @@
+{
+	"files.associations": {
+		"ConditionCodes.C": "cpp",
+		"CPU.C": "cpp",
+		"D.C": "cpp",
+		"yess.C": "cpp",
+		"DecodeStage.C": "cpp",
+		"FetchStage.C": "cpp",
+		"ExecuteStage.C": "cpp",
+		"MemoryStage.C": "cpp",
+		"Memory.C": "cpp",
+		"cstdint": "cpp",
+		"Tools.C": "cpp"
+	},
+	"makefile.configureOnOpen": false
+}

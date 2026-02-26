@@ -1,0 +1,62 @@
+        .pos 0
+#initialize %rax to 0
+		irmovq 0, %rax
+#initialize another register to the address of the first number
+#it can also be helpful to initialize another register to 1
+		irmovq nums, %rcx
+		irmovq $1, %rdx
+
+#for each number:  
+#get the number out of memory
+#cause the condition codes to be modified based upon value of the number
+#add 1 to %rax if number <= 0; otherwise, add 0 to %rax
+
+#removed potentially unecessary nop after the andq instructions
+		mrmovq (%rcx), %r8
+		irmovq $1, %r9
+		addq %rax, %r9
+		andq %r8, %r8
+		cmovle %r9, %rax
+
+		mrmovq 8(%rcx), %r8
+		irmovq $1, %r9
+		addq %rax, %r9
+		andq %r8, %r8
+		cmovle %r9, %rax
+
+		mrmovq 16(%rcx), %r8
+		irmovq $1, %r9
+		addq %rax, %r9
+		andq %r8, %r8
+		cmovle %r9, %rax
+
+		mrmovq 24(%rcx), %r8
+		irmovq $1, %r9
+		addq %rax, %r9
+		andq %r8, %r8
+		cmovle %r9, %rax
+
+		mrmovq 32(%rcx), %r8
+		irmovq $1, %r9
+		addq %rax, %r9
+		andq %r8, %r8
+		cmovle %r9, %rax
+
+
+
+
+
+#finally store %rax in memory location result
+		irmovq result, %rcx
+		rmmovq %rax, (%rcx)
+
+        halt
+        .align 8
+result: .quad 0     #should be 3 at end
+nums:   .quad 11
+        .quad -23
+        .quad 0
+        .quad 15
+        .quad -3
+        .quad 4
+

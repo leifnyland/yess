@@ -1,0 +1,49 @@
+# This program calls a min function which takes as input the
+# address of a list and the number of elements in the list
+# and returns the smallest value in the list
+#
+        .pos 0
+        irmovq stack, %rsp   #initialize stack pointer
+        irmovq list, %rdi    #address of first element
+        irmovq len, %rsi     #address of length of list
+        mrmovq (%rsi), %rsi  #load length of list
+		irmovq 8, %r8        #increment value
+		irmovq 1, %r10 		 #store 1
+        call min
+#  When halt statement is reached, %rax should be equal to -7 (0xfffffffffffffff9)
+        halt
+#
+# min function
+# sets %rax to the value of the smallest element in a list
+# %rdi contains the address of the first element
+# %rsi contains the length of the list
+# TODO: write the min function
+min:     
+		mrmovq (%rdi), %rax  #store the new value in %rax
+loop:
+		addq %r8, %rdi		  #increment
+		mrmovq (%rdi), %r14   #put new value in %r14
+		mrmovq (%rdi), %r13   #put new value in %r13
+		subq %rax, %r13		  #diff new - old
+		cmovl %r14, %rax 	  #store new value in %rax if smaller
+		subq %r10, %rsi	      #change length remaining
+		jg loop
+        ret    
+#
+#        list data
+        .pos 0x100
+len:    .quad 10 
+list:   .quad 14
+        .quad 3
+        .quad 2
+        .quad 27
+        .quad -2
+        .quad 12
+        .quad 23
+        .quad 5
+        .quad -7
+        .quad 9
+
+#       stack    
+        .pos 0x200
+stack:  .quad 0    

@@ -1,0 +1,208 @@
+#-sets registers
+#part 1
+irmovq 3, %rax
+irmovq 0, %rcx
+irmovq 2, %rdx
+irmovq 0, %rbx
+irmovq 0, %rsp
+irmovq 0, %rbp
+irmovq 0, %rsi
+irmovq 0, %rdi
+irmovq 0, %r8
+irmovq 0, %r9
+irmovq 0, %r10
+irmovq 0, %r11
+irmovq 0, %r12
+irmovq 0, %r13
+irmovq 0, %r14
+#step 2
+#sum r1 to r4
+#sum r2 to r4 (dest)
+#repeat
+addq %rax, %rbx
+nop
+nop
+nop
+addq %rcx, %rbx
+addq %rcx, %rsp
+nop
+nop
+nop
+addq %rdx, %rsp
+addq %rdx, %rbp
+nop
+nop
+nop
+addq %rbx, %rbp
+addq %rbx, %rsi
+nop
+nop
+nop
+addq %rsp, %rsi
+addq %rsp, %rdi
+nop
+nop
+nop
+addq %rbp, %rdi
+addq %rbp, %r8
+nop
+nop
+nop
+addq %rsi, %r8
+addq %rsi, %r9
+nop
+nop
+nop
+addq %rdi, %r9
+addq %rdi, %r10
+nop
+nop
+nop
+addq %r8, %r10
+addq %r8, %r11
+nop
+nop
+nop
+addq %r9, %r11
+addq %r9, %r12
+nop
+nop
+nop
+addq %r10, %r12
+addq %r10, %r13
+nop
+nop
+nop
+addq %r11, %r13
+addq %r11, %r14
+nop
+nop
+nop
+addq %r12, %r14
+#part 3
+#middle value doesn't move
+#recalculate it at the end
+#in meantime use %rdi (middle) as spare register
+#swap rax and r14 then n+1 and n-1 until middle is reached
+irmovq 0, %rdi
+nop
+nop
+nop
+addq %rax, %rdi
+irmovq 0, %rax
+nop
+nop
+nop
+addq %r14, %rax
+irmovq 0, %r14
+nop
+nop
+nop
+addq %rdi, %r14
+		#rcx and r13
+irmovq 0, %rdi
+nop
+nop
+nop
+addq %rcx, %rdi
+irmovq 0, %rcx
+nop
+nop
+nop
+addq %r13, %rcx
+irmovq 0, %r13
+nop
+nop
+nop
+addq %rdi, %r13
+		#rdx and r12
+irmovq 0, %rdi
+nop
+nop
+nop
+addq %rdx, %rdi
+irmovq 0, %rdx
+nop
+nop
+nop
+addq %r12, %rdx
+irmovq 0, %r12
+nop
+nop
+nop
+addq %rdi, %r12
+		#rbx and r11
+irmovq 0, %rdi
+nop
+nop
+nop
+addq %rbx, %rdi
+irmovq 0, %rbx
+nop
+nop
+nop
+addq %r11, %rbx
+irmovq 0, %r11
+nop
+nop
+nop
+addq %rdi, %r11
+		#rsp and r10
+irmovq 0, %rdi
+nop
+nop
+nop
+addq %rsp, %rdi
+irmovq 0, %rsp
+nop
+nop
+nop
+addq %r10, %rsp
+irmovq 0, %r10
+nop
+nop
+nop
+addq %rdi, %r10
+		#rbp and r9
+irmovq 0, %rdi
+nop
+nop
+nop
+addq %rbp, %rdi
+irmovq 0, %rbp
+nop
+nop
+nop
+addq %r9, %rbp
+irmovq 0, %r9
+nop
+nop
+nop
+addq %rdi, %r9
+
+irmovq 0, %rdi
+nop
+nop
+nop
+addq %rsi, %rdi
+irmovq 0, %rsi
+nop
+nop
+nop
+addq %r8, %rsi
+irmovq 0, %r8
+nop
+nop
+nop
+addq %rdi, %r8
+
+irmovq 0, %rdi
+nop
+nop
+nop
+addq %r9, %rdi
+nop
+nop
+nop
+addq %r10, %rdi
+halt
